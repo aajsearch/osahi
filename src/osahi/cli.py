@@ -1,7 +1,7 @@
-"""Check a trajectory file, or a reference harness config file.
+"""Check a trajectory file against the v0.1 conformance rules.
 
-The trajectory command is unchanged: one JSON list, scored by check_trajectory.
-``check-config`` is a reference-runtime convenience and does not call the checker.
+The command is one JSON list, scored by check_trajectory. ``check-config`` is a
+reference-config subcommand. It does not call the checker.
 """
 
 from __future__ import annotations
@@ -13,7 +13,10 @@ from pathlib import Path
 from osahi.config import ConfigError, load_config
 from osahi.conformance import check_trajectory
 
-_USAGE = "usage: osahi-check <trajectory.json> | osahi-check check-config <file.json>"
+_USAGE = (
+    "usage: osahi-check <trajectory.json>\n"
+    "       osahi-check check-config <file.json>  (reference config)"
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -35,7 +38,10 @@ def main(argv: list[str] | None = None) -> int:
 
 def _check_config(args: list[str]) -> int:
     if len(args) != 1:
-        print("usage: osahi-check check-config <file.json>", file=sys.stderr)
+        print(
+            "usage: osahi-check check-config <file.json>  (reference config)",
+            file=sys.stderr,
+        )
         return 2
     try:
         config = load_config(args[0])

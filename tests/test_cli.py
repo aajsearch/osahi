@@ -16,8 +16,13 @@ def test_cli_rejects_a_gapped_sequence(capsys):
     assert "seq.contiguous" in capsys.readouterr().out
 
 
-def test_cli_usage_without_a_file():
+def test_cli_usage_without_a_file(capsys):
     assert main([]) == 2
+    err = capsys.readouterr().err
+    assert err.startswith("usage: osahi-check <trajectory.json>\n")
+    assert "check-config" in err
+    assert "reference config" in err
+    assert "|" not in err
 
 
 def test_check_config_accepts_the_startup_profile(capsys):
@@ -35,8 +40,11 @@ def test_check_config_names_the_bad_field(tmp_path, capsys):
     assert "context.budget" in capsys.readouterr().out
 
 
-def test_check_config_requires_a_file():
+def test_check_config_requires_a_file(capsys):
     assert main(["check-config"]) == 2
+    err = capsys.readouterr().err
+    assert err.startswith("usage: osahi-check check-config ")
+    assert "reference config" in err
 
 
 def test_checked_file_is_json():
