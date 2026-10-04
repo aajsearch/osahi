@@ -12,7 +12,7 @@ from types import MappingProxyType
 import jsonschema
 
 from osahi.errors import OsahiError
-from osahi.schema import load_schema
+from osahi.schema import load_schema, repo_root
 
 # Visible profile defaults. The schema still rejects a budget below 2, a
 # checkpoint flag other than true, and telemetry turned off. Enterprise does
@@ -104,6 +104,17 @@ class HarnessConfig:
     recovery: RecoveryConfig
     telemetry: TelemetryConfig
     metadata: MappingProxyType
+
+
+def load_profile(name: str) -> HarnessConfig:
+    """Load ``profiles/<name>.json``. Startup and enterprise share this loader."""
+
+    if name not in {"startup", "enterprise"}:
+        raise ConfigError([("profile", f"unknown profile {name!r}")])
+    path = repo_root() / "profiles" / f"{name}.json"
+    if not path.is_file():
+        raise ConfigError([("profile", f"missing profile file {path.name}")])
+    return load_config(path)
 
 
 def load_config(source: dict | str | Path) -> HarnessConfig:
