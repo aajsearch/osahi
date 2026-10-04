@@ -20,6 +20,25 @@ def test_cli_usage_without_a_file():
     assert main([]) == 2
 
 
+def test_check_config_accepts_the_startup_profile(capsys):
+    path = repo_root() / "profiles" / "startup.json"
+    assert main(["check-config", str(path)]) == 0
+    assert "ok config startup" in capsys.readouterr().out
+
+
+def test_check_config_names_the_bad_field(tmp_path, capsys):
+    path = tmp_path / "broken.json"
+    document = json.loads((repo_root() / "profiles" / "startup.json").read_text(encoding="utf-8"))
+    document["context"]["budget"] = 1
+    path.write_text(json.dumps(document), encoding="utf-8")
+    assert main(["check-config", str(path)]) == 1
+    assert "context.budget" in capsys.readouterr().out
+
+
+def test_check_config_requires_a_file():
+    assert main(["check-config"]) == 2
+
+
 def test_checked_file_is_json():
     path = repo_root() / "conformance" / "fixtures" / "accept-finish.json"
     assert isinstance(json.loads(path.read_text(encoding="utf-8")), list)
