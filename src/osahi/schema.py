@@ -1,4 +1,8 @@
-"""Load the published JSON Schemas and validate wire documents."""
+"""Load the published JSON Schemas and validate wire documents.
+
+``example_paths`` and ``schema_for_example`` cover agent-run and trajectory
+events only. Reference settings are validated by the config loader.
+"""
 
 from __future__ import annotations
 
@@ -11,8 +15,6 @@ from osahi import SPEC_VERSION
 
 _SCHEMA_BY_EXAMPLE = {
     "agent-run.json": "agent-run.schema.json",
-    "harness-config-startup.json": "harness-config.schema.json",
-    "harness-config-enterprise.json": "harness-config.schema.json",
 }
 
 

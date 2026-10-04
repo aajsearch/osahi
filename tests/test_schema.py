@@ -1,9 +1,11 @@
 import json
+from pathlib import Path
 
 import jsonschema
 import pytest
 
-from osahi.schema import example_paths, load_schema, schema_for_example, validate_document
+from osahi.config import load_config
+from osahi.schema import example_paths, load_schema, repo_root, schema_for_example, validate_document
 
 
 def test_harness_config_schema_id_is_not_a_wire_urn():
@@ -37,38 +39,30 @@ def test_checkpoint_without_scratchpad_is_rejected():
         validate_document(document, "trajectory-event.schema.json")
 
 
-def _startup_config() -> dict:
-    path = next(path for path in example_paths() if path.name == "harness-config-startup.json")
-    return json.loads(path.read_text(encoding="utf-8"))
+_WIRE_SCHEMAS = {"agent-run.schema.json", "trajectory-event.schema.json"}
 
 
-def test_harness_config_examples_are_startup_and_enterprise():
-    names = {path.name for path in example_paths()}
-    assert "harness-config-startup.json" in names
-    assert "harness-config-enterprise.json" in names
+def test_wire_examples_do_not_include_reference_config():
+    paths = example_paths()
+    names = {path.name for path in paths}
+    assert paths, "schemas/examples must not be empty"
+    assert "harness-config-startup.json" not in names
+    assert "harness-config-enterprise.json" not in names
+    assert not any(name.startswith("harness-config") for name in names)
+    for path in paths:
+        assert schema_for_example(path) in _WIRE_SCHEMAS
+    for name in ("harness-config-startup.json", "harness-config-enterprise.json"):
+        assert schema_for_example(Path(name)) != "harness-config.schema.json"
 
 
-@pytest.mark.parametrize(
-    "mutate",
-    [
-        "missing-allow",
-        "budget-1",
-        "unknown-profile",
-        "missing-workload-id",
-    ],
-)
-def test_harness_config_rejects_unsafe_documents(mutate):
-    document = _startup_config()
-    if mutate == "missing-allow":
-        del document["policy"]["allow"]
-    elif mutate == "budget-1":
-        document["context"]["budget"] = 1
-    elif mutate == "unknown-profile":
-        document["profile"] = "platform"
-    elif mutate == "missing-workload-id":
-        del document["workload"]["id"]
-    with pytest.raises(jsonschema.ValidationError):
-        validate_document(document, "harness-config.schema.json")
+def test_profile_json_is_validated_by_the_config_loader():
+    example_names = {path.name for path in example_paths()}
+    for name in ("startup", "enterprise"):
+        path = repo_root() / "profiles" / f"{name}.json"
+        assert path.is_file()
+        assert path.name not in example_names
+        config = load_config(path)
+        assert config.profile == name
 
 
 def test_capability_effect_outside_allow_or_deny_is_rejected():
