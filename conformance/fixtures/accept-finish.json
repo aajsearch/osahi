@@ -1,0 +1,63 @@
+[
+  {
+    "event_id": "evt_0001",
+    "run_id": "run_0001",
+    "seq": 1,
+    "type": "run.started",
+    "at": "2026-10-04T04:30:01Z",
+    "payload": {
+      "spec_version": "0.1.0",
+      "model": {"provider": "scripted", "name": "fixture-model"},
+      "workload": {"id": "wl_finish", "name": "finish"},
+      "harness": {"name": "handwritten", "version": "0.1.0"}
+    },
+    "causation_id": null,
+    "correlation_id": "run_0001"
+  },
+  {
+    "event_id": "evt_0002",
+    "run_id": "run_0001",
+    "seq": 2,
+    "type": "model.invoked",
+    "at": "2026-10-04T04:30:02Z",
+    "payload": {"turn_index": 0},
+    "causation_id": "evt_0001",
+    "correlation_id": "run_0001"
+  },
+  {
+    "event_id": "evt_0003",
+    "run_id": "run_0001",
+    "seq": 3,
+    "type": "model.completed",
+    "at": "2026-10-04T04:30:03Z",
+    "payload": {
+      "kind": "finish",
+      "text": "done",
+      "telemetry": {
+        "trace_id": "trace_0001",
+        "span_id": "span_0001",
+        "attributes": {
+          "osahi.spec.version": "0.1.0",
+          "osahi.run.id": "run_0001",
+          "osahi.workload.id": "wl_finish",
+          "osahi.harness.name": "handwritten",
+          "gen_ai.operation.name": "chat",
+          "gen_ai.request.model": "fixture-model",
+          "gen_ai.system": "scripted"
+        }
+      }
+    },
+    "causation_id": "evt_0002",
+    "correlation_id": "run_0001"
+  },
+  {
+    "event_id": "evt_0004",
+    "run_id": "run_0001",
+    "seq": 4,
+    "type": "run.completed",
+    "at": "2026-10-04T04:30:04Z",
+    "payload": {"text": "done"},
+    "causation_id": "evt_0003",
+    "correlation_id": "run_0001"
+  }
+]

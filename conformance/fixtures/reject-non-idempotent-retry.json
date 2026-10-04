@@ -1,0 +1,55 @@
+[
+  {
+    "event_id": "evt_0001",
+    "run_id": "run_0001",
+    "seq": 1,
+    "type": "run.started",
+    "at": "2026-10-04T04:30:01Z",
+    "payload": {
+      "spec_version": "0.1.0",
+      "model": {"provider": "scripted", "name": "fixture-model"},
+      "workload": {"id": "wl_retry", "name": "retry"},
+      "harness": {"name": "handwritten", "version": "0.1.0"}
+    },
+    "causation_id": null,
+    "correlation_id": "run_0001"
+  },
+  {
+    "event_id": "evt_0002",
+    "run_id": "run_0001",
+    "seq": 2,
+    "type": "tool.failed",
+    "at": "2026-10-04T04:30:02Z",
+    "payload": {
+      "call_id": "call_0001",
+      "tool_name": "charge",
+      "error": "declined",
+      "idempotent": false,
+      "telemetry": {
+        "trace_id": "trace_0001",
+        "span_id": "span_0001",
+        "attributes": {
+          "osahi.spec.version": "0.1.0",
+          "osahi.run.id": "run_0001",
+          "osahi.workload.id": "wl_retry",
+          "osahi.harness.name": "handwritten",
+          "gen_ai.operation.name": "execute_tool",
+          "osahi.tool.name": "charge",
+          "osahi.capability.effect": "allow"
+        }
+      }
+    },
+    "causation_id": "evt_0001",
+    "correlation_id": "run_0001"
+  },
+  {
+    "event_id": "evt_0003",
+    "run_id": "run_0001",
+    "seq": 3,
+    "type": "recovery.completed",
+    "at": "2026-10-04T04:30:03Z",
+    "payload": {"action": "retry", "call_id": "call_0001"},
+    "causation_id": "evt_0002",
+    "correlation_id": "run_0001"
+  }
+]

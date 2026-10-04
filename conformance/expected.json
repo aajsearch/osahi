@@ -1,0 +1,7 @@
+{
+  "reject-seq-gap.json": ["seq.contiguous"],
+  "reject-invoke-without-allow.json": ["capability.allow_before_invoke"],
+  "reject-deny-then-invoke.json": ["capability.deny_blocks_invoke"],
+  "reject-bad-version.json": ["run.version"],
+  "reject-non-idempotent-retry.json": ["recovery.idempotent"]
+}
