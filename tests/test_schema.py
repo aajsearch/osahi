@@ -3,7 +3,13 @@ import json
 import jsonschema
 import pytest
 
-from osahi.schema import example_paths, schema_for_example, validate_document
+from osahi.schema import example_paths, load_schema, schema_for_example, validate_document
+
+
+def test_harness_config_schema_id_is_not_a_wire_urn():
+    schema = load_schema("harness-config.schema.json")
+    assert schema["$id"] == "urn:osahi:reference:harness-config"
+    assert schema["description"].startswith("This file configures the reference package only.")
 
 
 def test_published_examples_match_their_schemas():

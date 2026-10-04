@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:osahi:schema:v0.1:harness-config",
+  "$id": "urn:osahi:reference:harness-config",
   "title": "ReferenceHarnessConfig",
-  "description": "Configuration for the Python reference harness. This document is not a requirement of the OSAHI specification. Conformance validates trajectories, not this file.",
+  "description": "This file configures the reference package only. It is not a requirement of the OSAHI specification. Conformance validates trajectories, not this file. The recovery.checkpoints and telemetry.enabled fields are fixed in the reference package and are not conformance switches.",
   "type": "object",
   "additionalProperties": false,
   "required": [
