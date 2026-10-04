@@ -38,6 +38,36 @@ class FlakyTool:
         return {"ok": True, "output": {"recovered": True}, "error": None}
 
 
+class ToolSpec:
+    """A function registered as a tool the reference harness already knows how to call.
+
+    ``fn`` receives the argument object. A returned dict is the tool output.
+    A dict that already contains ``ok`` is treated as a full tool result.
+    Any other return value is wrapped as ``{"value": ...}``. An exception
+    becomes a failed result so the harness can recover instead of crashing.
+    """
+
+    def __init__(self, name: str, capability_id: str, fn, idempotent: bool = True) -> None:
+        self.name = name
+        self.capability_id = capability_id
+        self.fn = fn
+        self.idempotent = idempotent
+
+    def invoke(self, arguments: dict) -> dict:
+        try:
+            result = self.fn(arguments)
+        except Exception as exc:
+            return {"ok": False, "output": {}, "error": f"{type(exc).__name__}: {exc}"}
+        if isinstance(result, dict) and "ok" in result:
+            output = result.get("output", {})
+            if not isinstance(output, dict):
+                output = {"value": output}
+            return {"ok": bool(result["ok"]), "output": output, "error": result.get("error")}
+        if isinstance(result, dict):
+            return {"ok": True, "output": result, "error": None}
+        return {"ok": True, "output": {"value": result}, "error": None}
+
+
 class DecliningTool:
     """A non-idempotent tool that always fails. Retry must not be chosen for it."""
 
