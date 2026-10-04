@@ -327,6 +327,8 @@ The proposal's three horizons stay intact. v0.1 is the first slice of the short-
 
 Sequence set on 2026-10-04 from the adapter / catalog / control-plane discussion. After v0.1 the reference package moves in three directions, in the order below. They do not change the v0.1 conformance rules. `check_trajectory` stays ignorant of config, profiles, credentials, and any control plane. The chatbot or assistant orchestrator is a user of the lifecycle ([docs/USERS.md](USERS.md)); the chat window is not the product.
 
+The model adapter, the HTTP tool transport, and the short catalog are in the reference package. `ChatCompletionsModel` covers a hosted chat endpoint and a local one. `HttpTool` is the stand-in for an MCP tool call: `invoke` returns the same result shape the in-process tools use, and the harness still waits for `capability.decided` before `tool.invoked`. `hosted_chat`, `local_chat`, and `http_tool` live in `osahi.catalog`. Credentials stay in the environment (`OSAHI_CHAT_API_KEY` for the hosted helper) or in memory for one console request. They are not written into config files and they are not trajectory fields. The reference console in `osahi.console` exists. It is optional, it is a client of the contract, and it is not the standard. Conformance is unchanged: `check_trajectory` does not import adapters, config, or credentials.
+
 ### Direction 1 — adapters
 
 The next build is one real model adapter beside `ScriptedModel`. It reads the scratchpad the harness already built, calls one provider, and appends `model.invoked` and `model.completed` with the same payload shape the scripted model writes. Tool results already land in the scratchpad. The allow/deny decision already happens before invocation. The checker does not learn which provider answered.
@@ -339,7 +341,7 @@ After the adapter interfaces exist, ship a short reference list that makes an as
 
 ### Direction 3 — control plane, after the adapters
 
-A reference console loads the reference harness config (`urn:osahi:reference:harness-config`, not a wire schema), accepts credentials for those adapters, starts a run, and shows the trajectory the checker already scores. This is the onboarding path for a startup engineer or a platform team, including a team building a chatbot orchestrator (model, tool hydration, policy, then an answer or a goal). It is optional. A team that emits the JSON and runs the checker is already adopted. The control plane is a client of the contract. It is not the standard, not a required runtime, and not a hosted product mandate. Do not build it before a live model adapter exists.
+A reference console loads the reference harness config (`urn:osahi:reference:harness-config`, not a wire schema), accepts credentials for those adapters, starts a run, and shows the trajectory the checker already scores. This is the onboarding path for a startup engineer or a platform team, including a team building a chatbot orchestrator (model, tool hydration, policy, then an answer or a goal). It is optional. A team that emits the JSON and runs the checker is already adopted. The control plane is a client of the contract. It is not the standard, not a required runtime, and not a hosted product mandate. Do not build it before a live model adapter exists. That adapter now exists, and the console in `osahi.console` remains optional.
 
 ### Later, not pulled forward
 
@@ -371,7 +373,7 @@ Phase B's first slices are Direction 1 and Direction 2, in that order.
 2. An MCP tool adapter: a remote tool maps onto a `capability_id` and still cannot run before `capability.decided`. The harness still sees `tool.requested`, `capability.decided`, and `tool.invoked`.
 3. The short credential catalog (Direction 2): one hosted model, one local model, and one tool transport. The developer supplies credentials. Keys stay in the adapter environment.
 
-Direction 3, the reference console, may follow that catalog. It is optional. It is not required to exit Phase B, and it is not built before a live model adapter exists.
+Direction 3, the reference console, is in the package. It is optional. It is not required to exit Phase B.
 
 After those slices, Phase B stores and exports events a live model and a live tool will produce:
 
