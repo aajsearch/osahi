@@ -26,6 +26,7 @@ Rule ids:
 | `checkpoint.snapshot` | `checkpoint.created` lacks `snapshot.working_memory` or `snapshot.scratchpad`. |
 | `recovery.checkpoint_exists` | `recovery.completed` with `action = rollback` names a `checkpoint_id` that no earlier checkpoint created. |
 | `recovery.idempotent` | `recovery.completed` with `action = retry` refers to a `call_id` whose `tool.failed` event has `idempotent = false`. |
+| `recovery.escalate` | `recovery.completed` with `action = escalate` is not followed by `run.failed`. |
 | `telemetry.required` | A model or tool outcome event lacks a required attribute. |
 | `payload.required` | A known event type lacks a required payload field from the trajectory document. |
 
