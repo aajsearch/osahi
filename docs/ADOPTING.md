@@ -1,6 +1,6 @@
 # Adopting the reference harness
 
-This document is for an engineer who wants a harness this week. It describes the Python package in this repository.
+This document is for an engineer who wants a harness this week. It describes the Python package in this repository. A team building a chatbot or assistant orchestrator is a user of the lifecycle even when they do not take this package; that split is in [Who OSAHI is for](USERS.md).
 
 It is not part of the OSAHI specification. The spec standardizes the contract: the run, the trajectory, capability decisions, state, checkpoints, recovery, and telemetry. Another implementation can ignore every file named here and still conform. `check_trajectory` reads a JSON trajectory. It does not load this configuration, and it does not import the harness.
 

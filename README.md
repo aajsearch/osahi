@@ -80,6 +80,8 @@ examples/          echo run, plus startup and enterprise adoption programs
 
 Profiles, `check-config`, and [docs/ADOPTING.md](docs/ADOPTING.md) belong to the Python package in this repository. They are not part of the specification. A second implementation can ignore them and still conform by emitting a trajectory the checker accepts.
 
+Who the lifecycle is for, including a team building an assistant orchestrator, is in [docs/USERS.md](docs/USERS.md).
+
 `profiles/startup.json` and `profiles/enterprise.json` are the two settings files. The enterprise file uses a stricter budget, a lower retry cap, and required `owner` and `environment`.
 
 ```bash
