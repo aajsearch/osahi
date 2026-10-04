@@ -14,21 +14,6 @@ Production agents have to represent a run, an ordered trajectory, a capability d
 
 OSAHI standardizes the contract, not the implementation.
 
-## Use it
-
-The reference harness can be configured and called without reimplementing the loop, the log, checkpoints, recovery, or the checker. That configuration is a convenience of this package. It is not a requirement of the specification. The steps, the startup and enterprise profiles, and where conformance fits are in [docs/ADOPTING.md](docs/ADOPTING.md).
-
-From the repository root, after `pip install -e ".[dev]"`:
-
-```bash
-python -m osahi.cli check-config profiles/startup.json
-python examples/startup_echo.py
-python examples/enterprise_audit.py
-python -m osahi.cli conformance/fixtures/accept-finish.json
-```
-
-`check-config` exits 0 for a valid settings file and 1 with a field path when the file is not. The last command checks a JSON trajectory. It does not read harness config. `profiles/enterprise.json` is the same command with the stricter budget, retry cap, and required `owner` and `environment`.
-
 ## Smallest useful version (0.1)
 
 Seven primitives, and nothing else:
@@ -45,6 +30,27 @@ Seven primitives, and nothing else:
 
 Version 0.1 records nondeterminism. It does not pretend model outputs are deterministic. Replay rebuilds workflow transitions, authorization decisions, checkpoints, and recovery from the log, using the model and tool results that were recorded at the time.
 
+## Check a trajectory
+
+The conformance checker scores a JSON trajectory. It does not read harness config.
+
+From the repository root, after `pip install -e ".[dev]"`:
+
+```bash
+python -m osahi.cli conformance/fixtures/accept-finish.json
+```
+
+Exit 0 means the log satisfies the v0.1 rules. The suite grades that same checker:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+pytest
+```
+
+No API keys. The reference model is scripted, and the clock and identifiers are injected, so every trajectory is reproducible.
+
 ## What 0.1 deliberately leaves out
 
 - A real MCP router or network proxy
@@ -58,28 +64,28 @@ Those belong to later phases. See [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTAT
 ## Layout
 
 ```
-spec/           normative contracts (RFC 2119 language)
-schemas/        JSON Schema for the wire format and the reference config
-profiles/       startup and enterprise settings for the reference harness
-conformance/    fixture trajectories the checker must accept or reject
-src/osahi/      reference implementation, replaceable by design
-tests/          unit tests and conformance tests
-examples/       echo run, plus startup and enterprise adoption programs
+spec/              normative contracts (RFC 2119 language)
+schemas/           JSON Schema for the v0.1 wire format
+schemas/examples/  wire documents only (agent run and trajectory events)
+profiles/          startup and enterprise settings for the reference package
+conformance/       fixture trajectories the checker must accept or reject
+src/osahi/         reference implementation, replaceable by design
+tests/             unit tests and conformance tests
+examples/          echo run, plus startup and enterprise adoption programs
 ```
 
-## Run the tests
+`schemas/harness-config.schema.json` configures the reference package. Its id is `urn:osahi:reference:harness-config`, which is not a v0.1 wire URN (`urn:osahi:schema:v0.1:…`).
+
+## Reference package
+
+Profiles, `check-config`, and [docs/ADOPTING.md](docs/ADOPTING.md) belong to the Python package in this repository. They are not part of the specification. A second implementation can ignore them and still conform by emitting a trajectory the checker accepts.
+
+`profiles/startup.json` and `profiles/enterprise.json` are the two settings files. The enterprise file uses a stricter budget, a lower retry cap, and required `owner` and `environment`.
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-pytest
+python -m osahi.cli check-config profiles/startup.json
+python examples/startup_echo.py
+python examples/enterprise_audit.py
 ```
 
-No API keys. The reference model is scripted, and the clock and identifiers are injected, so every trajectory is reproducible.
-
-Check a trajectory file:
-
-```bash
-python -m osahi.cli conformance/fixtures/accept-finish.json
-```
+`check-config` exits 0 for a valid settings file and 1 with a field path when the file is not. It does not score a trajectory. The adoption steps are in [docs/ADOPTING.md](docs/ADOPTING.md).
