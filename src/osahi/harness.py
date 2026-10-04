@@ -17,6 +17,13 @@ from osahi.telemetry import carrier, model_attributes, tool_attributes
 _MISSING = object()
 
 
+def _failure_reason(exc: Exception) -> str:
+    """Text for run.failed. Callers must not put credentials in the exception."""
+
+    text = str(exc).strip()
+    return text or type(exc).__name__
+
+
 class ReferenceHarness:
     def __init__(
         self,
@@ -105,7 +112,11 @@ class ReferenceHarness:
         return project(self.events())
 
     def _one_turn(self) -> None:
-        turn = self.model.next_turn(self.context.items)
+        try:
+            turn = self.model.next_turn(self.context.items)
+        except Exception as exc:
+            self._emit("run.failed", {"reason": _failure_reason(exc)})
+            return
         self._emit("model.invoked", {"turn_index": self._turn_index})
         self._turn_index += 1
         invoked_id = self._last_event_id
@@ -115,6 +126,9 @@ class ReferenceHarness:
             "text": turn.get("text", ""),
             "telemetry": self._model_telemetry(),
         }
+        raw = turn.get("raw")
+        if isinstance(raw, dict):
+            completed["raw"] = copy.deepcopy(raw)
         if kind == "tool":
             completed.update(
                 {
