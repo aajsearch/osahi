@@ -127,6 +127,31 @@ From the repository root, with the package installed (`pip install -e ".[dev]"`)
 
 `load_profile("startup")` and `load_profile("enterprise")` read those files. `custom` has the same safe defaults as startup (budget 8, retry cap 2, checkpoints on, telemetry on) and does not require `owner` or `environment`. There is no third runtime class.
 
+## Live model
+
+Pass `ChatCompletionsModel` to `build_harness` in the same `model=` argument you would use for `ScriptedModel`. The harness still appends `model.invoked` and `model.completed`. The adapter does not write events.
+
+```python
+from osahi.build import build_harness
+from osahi.catalog import hosted_chat
+from osahi.config import load_config
+from osahi.tools import EchoTool
+
+config = load_config("profiles/startup.json")
+harness = build_harness(
+    config,
+    tools=[EchoTool()],
+    model=hosted_chat(
+        model="gpt-4o-mini",
+        capabilities={"echo": "tool.echo"},
+    ),
+)
+```
+
+`hosted_chat` reads `OSAHI_CHAT_API_KEY` when you omit `api_key`. `local_chat` is the same class pointed at `http://127.0.0.1:11434/v1` and does not read a key. The key is an `Authorization` header on the outbound request. It is not a field in the harness config and it is not stored on the trajectory.
+
+`examples/chat_adapter_echo.py` exits 0 when `OSAHI_CHAT_API_KEY` is absent. The fake-transport tests cover that path, so the example does not call the network and does not fail CI. Conformance is unchanged: `check_trajectory` still scores the JSON log and does not import the adapter.
+
 ## How conformance fits
 
 Before you ship a change to a tool, a policy, or a model adapter, run the checker on the trajectory:
