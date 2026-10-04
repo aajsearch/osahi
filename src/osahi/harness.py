@@ -32,6 +32,7 @@ class ReferenceHarness:
         context_budget: int = 8,
         max_retries: int = 2,
         recovery_policy=None,
+        metadata: dict | None = None,
     ) -> None:
         self.model = model
         self.tools = {tool.name: tool for tool in tools}
@@ -42,6 +43,7 @@ class ReferenceHarness:
         self.model_ref = dict(model_ref)
         self.harness_ref = dict(harness_ref or {"name": "osahi-reference", "version": "0.1.0"})
         self.max_retries = max_retries
+        self.metadata = copy.deepcopy(metadata or {})
         self._decide = recovery_policy or default_decide
         self.context = WorkingContext(context_budget)
         self.log = EventLog()
@@ -64,7 +66,7 @@ class ReferenceHarness:
             "harness": dict(self.harness_ref),
             "created_at": self.clock.now(),
             "parent_run_id": None,
-            "metadata": {},
+            "metadata": copy.deepcopy(self.metadata),
         }
         self._emit(
             "run.started",
@@ -73,6 +75,7 @@ class ReferenceHarness:
                 "model": self.run["model"],
                 "workload": self.run["workload"],
                 "harness": self.run["harness"],
+                "metadata": copy.deepcopy(self.run["metadata"]),
             },
             causation_id=None,
         )
