@@ -16,7 +16,18 @@ OSAHI standardizes the contract, not the implementation.
 
 ## Use it
 
-The reference harness can be configured and called without reimplementing the loop, the log, checkpoints, recovery, or the checker. That configuration is a convenience of this package. It is not a requirement of the specification. Start with [docs/ADOPTING.md](docs/ADOPTING.md).
+The reference harness can be configured and called without reimplementing the loop, the log, checkpoints, recovery, or the checker. That configuration is a convenience of this package. It is not a requirement of the specification. The steps, the startup and enterprise profiles, and where conformance fits are in [docs/ADOPTING.md](docs/ADOPTING.md).
+
+From the repository root, after `pip install -e ".[dev]"`:
+
+```bash
+python -m osahi.cli check-config profiles/startup.json
+python examples/startup_echo.py
+python examples/enterprise_audit.py
+python -m osahi.cli conformance/fixtures/accept-finish.json
+```
+
+`check-config` exits 0 for a valid settings file and 1 with a field path when the file is not. The last command checks a JSON trajectory. It does not read harness config. `profiles/enterprise.json` is the same command with the stricter budget, retry cap, and required `owner` and `environment`.
 
 ## Smallest useful version (0.1)
 
@@ -48,11 +59,12 @@ Those belong to later phases. See [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTAT
 
 ```
 spec/           normative contracts (RFC 2119 language)
-schemas/        JSON Schema for the wire format
+schemas/        JSON Schema for the wire format and the reference config
+profiles/       startup and enterprise settings for the reference harness
 conformance/    fixture trajectories the checker must accept or reject
 src/osahi/      reference implementation, replaceable by design
 tests/          unit tests and conformance tests
-examples/       one deterministic echo run
+examples/       echo run, plus startup and enterprise adoption programs
 ```
 
 ## Run the tests
@@ -69,5 +81,5 @@ No API keys. The reference model is scripted, and the clock and identifiers are 
 Check a trajectory file:
 
 ```bash
-python -m osahi.cli conformance/fixtures/allow-echo.json
+python -m osahi.cli conformance/fixtures/accept-finish.json
 ```
