@@ -1,0 +1,11 @@
+{
+  "run_id": "run_0001",
+  "spec_version": "0.1.0",
+  "status": "created",
+  "model": { "provider": "scripted", "name": "fixture-model" },
+  "workload": { "id": "wl_echo", "name": "echo" },
+  "harness": { "name": "osahi-reference", "version": "0.1.0" },
+  "created_at": "2026-10-04T04:30:00Z",
+  "parent_run_id": null,
+  "metadata": {}
+}
