@@ -59,7 +59,7 @@ No API keys. The reference model is scripted, and the clock and identifiers are 
 - Tier-2 and tier-3 memory systems (the context lifecycle is specified; only an L1 scratchpad is implemented)
 - Bindings to Temporal, Kubernetes, or a hosted control plane
 
-Those belong to later phases. See [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md).
+Those belong to later phases. The next reference-package build is a live model adapter, then an MCP tool adapter, then a short credential catalog ([section 8](docs/IMPLEMENTATION_PLAN.md#8-roadmap-after-the-mvp)).
 
 ## Layout
 

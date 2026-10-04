@@ -325,6 +325,26 @@ The milestone is done when all of the following are true:
 
 The proposal's three horizons stay intact. v0.1 is the first slice of the short-term horizon, narrowed until the contracts are real.
 
+Sequence set on 2026-10-04 from the adapter / catalog / control-plane discussion. After v0.1 the reference package moves in three directions, in the order below. They do not change the v0.1 conformance rules. `check_trajectory` stays ignorant of config, profiles, credentials, and any control plane. The chatbot or assistant orchestrator is a user of the lifecycle ([docs/USERS.md](USERS.md)); the chat window is not the product.
+
+### Direction 1 — adapters
+
+The next build is one real model adapter beside `ScriptedModel`. It reads the scratchpad the harness already built, calls one provider, and appends `model.invoked` and `model.completed` with the same payload shape the scripted model writes. Tool results already land in the scratchpad. The allow/deny decision already happens before invocation. The checker does not learn which provider answered.
+
+The adapter after that is an MCP tool adapter. A remote tool maps onto a `capability_id` and still cannot run before `capability.decided`. The events stay `tool.requested`, `capability.decided`, and `tool.invoked`. This is the reference-package slice of the proposal's gateway work, and it follows the model adapter.
+
+### Direction 2 — a short default catalog, bring-your-own credentials
+
+After the adapter interfaces exist, ship a short reference list that makes an assistant orchestrator runnable: one hosted model, one local model, and one tool transport. The developer supplies credentials. Keys live in the adapter environment. They never appear on the trajectory and they are not fields in the spec. "It works" means the run emits a conforming log. Further popular tools are separate packages that implement the adapter interface. They do not accumulate inside the spec repository.
+
+### Direction 3 — control plane, after the adapters
+
+A reference console loads the reference harness config (`urn:osahi:reference:harness-config`, not a wire schema), accepts credentials for those adapters, starts a run, and shows the trajectory the checker already scores. This is the onboarding path for a startup engineer or a platform team, including a team building a chatbot orchestrator (model, tool hydration, policy, then an answer or a goal). It is optional. A team that emits the JSON and runs the checker is already adopted. The control plane is a client of the contract. It is not the standard, not a required runtime, and not a hosted product mandate. Do not build it before a live model adapter exists.
+
+### Later, not pulled forward
+
+A durable log (SQLite, or a workflow-engine adapter), OTLP export, WASM or microVM enforcement, L2/L3 memory, and a trajectory comparison runner stay where the phases below already put them. SQLite and OTLP are the end of Phase B, after the model adapter, the MCP tool adapter, and the short catalog. They store and export events a live model and a live tool will produce. The workflow-engine adapter, sandbox enforcement, and L2 cache stay in Phase C. The comparison runner stays in Phase D.
+
 ### Phase A — Protocol slice (this repository, now)
 
 Corresponds to the proposal's months 1–6, reduced to what can be tested without a network.
@@ -343,17 +363,22 @@ Companies that want the reference loop, log, checkpoints, recovery, and checker 
 
 Exit: an independent reader can implement `project` and `check_trajectory` from the spec alone.
 
-### Phase B — Gateway and real models (next)
+### Phase B — Adapters, then a short catalog (next)
 
-The proposal's Open MCP Router, still behind the same capability events.
+Phase B's first slices are Direction 1 and Direction 2, in that order.
 
-- MCP client adapter that discovers tools and maps each tool onto a `capability_id`
-- Router process: register, authenticate, route. The harness still sees `tool.requested` / `capability.decided` / `tool.invoked`
-- One commercial or local model adapter beside `ScriptedModel`
-- OTLP exporter that maps `telemetry.attributes` without changing event names
-- State store interface with an in-memory implementation and one durable implementation (SQLite is enough). The projection function stays pure; the store only persists the log
+1. One real model adapter beside `ScriptedModel` (Direction 1).
+2. An MCP tool adapter: a remote tool maps onto a `capability_id` and still cannot run before `capability.decided`. The harness still sees `tool.requested`, `capability.decided`, and `tool.invoked`.
+3. The short credential catalog (Direction 2): one hosted model, one local model, and one tool transport. The developer supplies credentials. Keys stay in the adapter environment.
 
-Exit: the same conformance fixtures pass against the in-process tools and against one MCP server.
+Direction 3, the reference console, may follow that catalog. It is optional. It is not required to exit Phase B, and it is not built before a live model adapter exists.
+
+After those slices, Phase B stores and exports events a live model and a live tool will produce:
+
+- An OTLP exporter that maps `telemetry.attributes` without changing event names.
+- A state-store interface with an in-memory implementation and one durable implementation (SQLite is enough). The projection function stays pure; the store only persists the log.
+
+Exit: a live model adapter and one MCP tool produce a log `check_trajectory` accepts, and a run that uses the short catalog emits a conforming log. The same capability order holds for the in-process tools and for the remote tool.
 
 ### Phase C — Durable execution and isolation (proposal months 7–12)
 
@@ -396,7 +421,9 @@ Exit: a published workload where two models are compared on trajectory invariant
 
 ## 11. Immediate build order
 
-The repository is built in small commits so each commitment is reviewable on its own:
+This list is the v0.1 sequence. It is already built. What is next is section 8: a live model adapter, then an MCP tool adapter, then a short credential catalog.
+
+The repository was built in small commits so each commitment is reviewable on its own:
 
 1. Name, license, and the boundary of v0.1
 2. This plan
