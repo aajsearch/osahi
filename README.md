@@ -14,6 +14,10 @@ Production agents have to represent a run, an ordered trajectory, a capability d
 
 OSAHI standardizes the contract, not the implementation.
 
+## Use it
+
+The reference harness can be configured and called without reimplementing the loop, the log, checkpoints, recovery, or the checker. That configuration is a convenience of this package. It is not a requirement of the specification. Start with [docs/ADOPTING.md](docs/ADOPTING.md).
+
 ## Smallest useful version (0.1)
 
 Seven primitives, and nothing else:
