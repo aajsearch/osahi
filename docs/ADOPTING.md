@@ -8,7 +8,7 @@ Two profiles are provided. They differ by values in a JSON file. They do not sel
 
 ## What you configure
 
-A JSON object validated by `schemas/harness-config.schema.json`. Copy `profiles/startup.json` or `profiles/enterprise.json` and edit the fields. The loader fills omitted budget, retry, checkpoint, and telemetry values from the profile, then rejects the document before a run starts.
+A JSON object validated by `schemas/harness-config.schema.json`. The settings schema id is `urn:osahi:reference:harness-config` and is not in the v0.1 wire URN family (`urn:osahi:schema:v0.1:…`). Copy `profiles/startup.json` or `profiles/enterprise.json` and edit the fields. The loader fills omitted budget, retry, checkpoint, and telemetry values from the profile, then rejects the document before a run starts.
 
 | Field | What you set |
 | --- | --- |

@@ -39,7 +39,7 @@ The name is deliberate.
 - It says *harness*, the execution wrapper around a model, not the model and not the application.
 - It says *initiative*, because the durable artifacts are the spec and the conformance suite. The Python package is a reference, not the standard.
 
-Repository: `osahi`. Spec version: `0.1.0`. Wire-format schema URNs use `urn:osahi:schema:v0.1:<document>`.
+Repository: `osahi`. Spec version: `0.1.0`. Wire-format schema URNs use `urn:osahi:schema:v0.1:<document>`. The settings schema id is `urn:osahi:reference:harness-config` and is not in the v0.1 wire URN family (`urn:osahi:schema:v0.1:…`).
 
 ## 3. Principles that constrain the build
 
@@ -337,7 +337,7 @@ Corresponds to the proposal's months 1–6, reduced to what can be tested withou
 
 #### Reference configuration surface
 
-Companies that want the reference loop, log, checkpoints, recovery, and checker configure `schemas/harness-config.schema.json` and pass tool functions into `build_harness`. That file is a convenience of this package. It is not a requirement of the specification, and a second implementation does not have to read it.
+Companies that want the reference loop, log, checkpoints, recovery, and checker configure `schemas/harness-config.schema.json` and pass tool functions into `build_harness`. That file is a convenience of this package. It is not a requirement of the specification, and a second implementation does not have to read it. The settings schema id is `urn:osahi:reference:harness-config` and is not in the v0.1 wire URN family (`urn:osahi:schema:v0.1:…`).
 
 `check_trajectory` is unchanged. It still scores a JSON trajectory and does not import the config loader. Startup and enterprise are two JSON profiles (`profiles/startup.json`, `profiles/enterprise.json`) consumed by the same `ReferenceHarness`. The enterprise profile uses a smaller scratchpad budget (4), a lower retry cap (1), and required `metadata.owner` and `metadata.environment`. The unconfigured harness default remains the spec's reference retry cap of 2. Checkpoints stay on. Invalid settings fail in `load_config` with `ConfigError` before a run starts. See [docs/ADOPTING.md](docs/ADOPTING.md).
 
