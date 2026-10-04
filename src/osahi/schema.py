@@ -11,6 +11,8 @@ from osahi import SPEC_VERSION
 
 _SCHEMA_BY_EXAMPLE = {
     "agent-run.json": "agent-run.schema.json",
+    "harness-config-startup.json": "harness-config.schema.json",
+    "harness-config-enterprise.json": "harness-config.schema.json",
 }
 
 

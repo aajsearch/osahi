@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:osahi:schema:v0.1:harness-config",
+  "title": "ReferenceHarnessConfig",
+  "description": "Configuration for the Python reference harness. This document is not a requirement of the OSAHI specification. Conformance validates trajectories, not this file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version",
+    "profile",
+    "model",
+    "workload",
+    "harness",
+    "policy",
+    "context",
+    "recovery",
+    "telemetry",
+    "metadata"
+  ],
+  "properties": {
+    "spec_version": { "const": "0.1.0" },
+    "profile": { "enum": ["startup", "enterprise", "custom"] },
+    "model": { "$ref": "#/$defs/model" },
+    "workload": { "$ref": "#/$defs/workload" },
+    "harness": { "$ref": "#/$defs/harness" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "context": { "$ref": "#/$defs/context" },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "telemetry": { "$ref": "#/$defs/telemetry" },
+    "metadata": { "$ref": "#/$defs/metadata" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "profile": { "const": "enterprise" } },
+        "required": ["profile"]
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "required": ["owner", "environment"],
+            "properties": {
+              "owner": { "type": "string", "minLength": 1 },
+              "environment": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "name"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 }
+      }
+    },
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 }
+      }
+    },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_id", "allow"],
+      "properties": {
+        "policy_id": { "type": "string", "minLength": 1 },
+        "allow": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["budget"],
+      "properties": {
+        "budget": { "type": "integer", "minimum": 2 }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_retries", "checkpoints"],
+      "properties": {
+        "max_retries": { "type": "integer", "minimum": 0 },
+        "checkpoints": { "const": true }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "const": true }
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

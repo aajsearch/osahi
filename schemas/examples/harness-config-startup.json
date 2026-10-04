@@ -1,0 +1,12 @@
+{
+  "spec_version": "0.1.0",
+  "profile": "startup",
+  "model": { "provider": "scripted", "name": "startup-script" },
+  "workload": { "id": "wl_startup_echo", "name": "startup-echo" },
+  "harness": { "name": "osahi-reference", "version": "0.1.0" },
+  "policy": { "policy_id": "startup-allowlist", "allow": ["tool.echo"] },
+  "context": { "budget": 8 },
+  "recovery": { "max_retries": 2, "checkpoints": true },
+  "telemetry": { "enabled": true },
+  "metadata": {}
+}

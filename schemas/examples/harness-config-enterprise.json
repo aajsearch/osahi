@@ -1,0 +1,15 @@
+{
+  "spec_version": "0.1.0",
+  "profile": "enterprise",
+  "model": { "provider": "scripted", "name": "enterprise-script" },
+  "workload": { "id": "wl_enterprise_audit", "name": "enterprise-audit" },
+  "harness": { "name": "osahi-reference", "version": "0.1.0" },
+  "policy": {
+    "policy_id": "enterprise-catalog",
+    "allow": ["tool.echo", "tool.audit"]
+  },
+  "context": { "budget": 4 },
+  "recovery": { "max_retries": 1, "checkpoints": true },
+  "telemetry": { "enabled": true },
+  "metadata": { "owner": "platform-team", "environment": "production" }
+}
