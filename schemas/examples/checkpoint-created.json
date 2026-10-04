@@ -1,0 +1,14 @@
+{
+  "event_id": "evt_0002",
+  "run_id": "run_0001",
+  "seq": 2,
+  "type": "checkpoint.created",
+  "at": "2026-10-04T04:30:01Z",
+  "payload": {
+    "checkpoint_id": "ckpt_0001",
+    "state_version": 0,
+    "snapshot": { "working_memory": {}, "scratchpad": [] }
+  },
+  "causation_id": "evt_0001",
+  "correlation_id": "run_0001"
+}

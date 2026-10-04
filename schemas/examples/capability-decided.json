@@ -1,0 +1,16 @@
+{
+  "event_id": "evt_0004",
+  "run_id": "run_0001",
+  "seq": 4,
+  "type": "capability.decided",
+  "at": "2026-10-04T04:30:03Z",
+  "payload": {
+    "call_id": "call_0001",
+    "capability_id": "tool.echo",
+    "effect": "allow",
+    "reason": "capability is on the allowlist",
+    "policy_id": "allowlist"
+  },
+  "causation_id": "evt_0003",
+  "correlation_id": "run_0001"
+}

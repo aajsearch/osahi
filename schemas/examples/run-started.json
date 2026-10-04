@@ -1,0 +1,15 @@
+{
+  "event_id": "evt_0001",
+  "run_id": "run_0001",
+  "seq": 1,
+  "type": "run.started",
+  "at": "2026-10-04T04:30:00Z",
+  "payload": {
+    "spec_version": "0.1.0",
+    "model": { "provider": "scripted", "name": "fixture-model" },
+    "workload": { "id": "wl_echo", "name": "echo" },
+    "harness": { "name": "osahi-reference", "version": "0.1.0" }
+  },
+  "causation_id": null,
+  "correlation_id": "run_0001"
+}
