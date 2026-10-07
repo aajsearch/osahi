@@ -1262,6 +1262,149 @@
 
   .score-labels li:last-child { border-bottom: 1px solid var(--line); }
 
+  .hero-role .ex,
+  .role .ex {
+    display: block;
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--accent);
+  }
+
+  .cmp {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 188px 1fr 1fr;
+    grid-template-rows: 32px repeat(4, 1fr);
+    column-gap: 28px;
+  }
+
+  .cmp-h {
+    align-self: end;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--ink);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+
+  .cmp-lab,
+  .cmp-now,
+  .cmp-std {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--line);
+    padding: 6px 0;
+  }
+
+  .cmp-lab h2 {
+    margin: 0;
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .cmp-now p,
+  .cmp-std p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.32;
+    color: var(--soft);
+  }
+
+  .cmp-std .eg {
+    margin-top: 4px;
+    color: var(--accent);
+  }
+
+  .vision h1 {
+    font-size: 46px;
+    line-height: 1.08;
+    max-width: 18em;
+    margin-bottom: 22px;
+  }
+
+  .tri {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .tri article {
+    border-top: 1.5px solid var(--ink);
+    padding: 16px 8px 4px 0;
+    min-width: 0;
+  }
+
+  .tri h2 {
+    margin: 0 0 10px;
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-weight: 400;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+  }
+
+  .tri p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--soft);
+  }
+
+  .reli {
+    margin: 8px 0 0;
+    padding-top: 14px;
+    border-top: 1.5px solid var(--ink);
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .benefits {
+    flex: 1;
+    min-height: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    margin: 6px 0 0;
+    padding: 0;
+  }
+
+  .benefits li {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    align-items: center;
+    gap: 28px;
+    border-top: 1px solid var(--line);
+    min-height: 0;
+  }
+
+  .benefits li:last-child { border-bottom: 1px solid var(--line); }
+
+  .benefits strong {
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-weight: 400;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+
+  .benefits span {
+    font-size: 24px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--soft);
+  }
+
 </style>
 </head>
 <body>
@@ -1472,23 +1615,28 @@
         <div class="hero-role">
           <h2>Assistant orchestrator</h2>
           <p>Connect a model, hydrate from tools, allow or deny, then answer or reach the goal.</p>
+          <p class="ex">Books Thursday at three. Calendar is allowed, mail waits for a person. The same events exist no matter which loop ran.</p>
         </div>
         <div class="role-row">
           <div class="role">
             <h2>Platform teams</h2>
             <p>Run one lifecycle across workloads.</p>
+            <p class="ex">One booking workload and one send workload share one record.</p>
           </div>
           <div class="role">
             <h2>Security and audit</h2>
             <p>Score a trajectory.</p>
+            <p class="ex">Scores the deny, then the allow, without reading a private log.</p>
           </div>
           <div class="role">
             <h2>Evaluation</h2>
             <p>Compare model × harness × workload.</p>
+            <p class="ex">Same workload, two harnesses, compare the path.</p>
           </div>
           <div class="role">
             <h2>Framework authors</h2>
             <p>Emit the same record from their own runtime.</p>
+            <p class="ex">Emits those events from their own runtime and the score still applies.</p>
           </div>
         </div>
       </div>
@@ -1530,44 +1678,24 @@
     <section class="slide" aria-roledescription="slide" aria-hidden="true">
       <div class="slide-body">
         <p class="brand">OSAHI</p>
-        <h1>A harness and a record</h1>
-        <div class="pair">
-          <div class="pair-col">
-            <h2>Omnigent</h2>
-            <p class="pair-kicker">A meta-harness</p>
-            <div class="pair-fig">
-              <div class="session">
-                <div class="agent">
-                  <strong>Agent</strong>
-                  <span>Claude Code, Codex, Pi, or one you write</span>
-                </div>
-                <div class="sits">
-                  <span>Policies</span>
-                  <span>OS sandbox</span>
-                  <span>Live shared session</span>
-                </div>
-              </div>
-            </div>
-            <p class="pair-line">It runs the session.</p>
-            <p class="pair-credit">Built in the open by the Databricks AI team and contributors.</p>
-          </div>
-          <div class="pair-col">
-            <h2>OSAHI</h2>
-            <p class="pair-kicker">The execution record</p>
-            <div class="pair-fig">
-              <ol class="rec-list">
-                <li>run</li>
-                <li>trajectory</li>
-                <li>capability decision</li>
-                <li>state</li>
-                <li>checkpoint</li>
-                <li>recovery</li>
-                <li>telemetry</li>
-              </ol>
-            </div>
-            <p class="pair-line">It records the run.</p>
-            <p class="pair-credit"></p>
-          </div>
+        <h1>Four parts of the lifecycle</h1>
+        <div class="cards" aria-label="Open MCP router, virtual memory, GenAI telemetry, and an event-sourced orchestrator.">
+          <article class="card">
+            <h2>Open MCP router</h2>
+            <p>Discovery, routing, and authorization for tool endpoints. The reasoning loop does not know where the tool lives.</p>
+          </article>
+          <article class="card">
+            <h2>Virtual memory</h2>
+            <p>Scratchpad, episodic cache, cold storage. Prune the context. Keep the log.</p>
+          </article>
+          <article class="card">
+            <h2>GenAI telemetry</h2>
+            <p>OpenTelemetry semantic conventions on every step: tokens, latency, tool sequence, errors.</p>
+          </article>
+          <article class="card">
+            <h2>Event-sourced orchestrator</h2>
+            <p>Immutable history. Pause and resume. Replay a failure without erasing it.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -1575,91 +1703,66 @@
     <section class="slide" aria-roledescription="slide" aria-hidden="true">
       <div class="slide-body">
         <p class="brand">OSAHI</p>
-        <h1>The same session can be scored</h1>
-        <div class="score" aria-label="Omnigent session, then lifecycle events, then the same checker as any other harness.">
-          <div class="score-node">
-            <strong>Omnigent session</strong>
+        <h1>What is running, and what we standardize</h1>
+        <div class="cmp" aria-label="Now and standard for the router, memory, telemetry, and orchestrator.">
+          <div></div>
+          <div class="cmp-h">Now</div>
+          <div class="cmp-h">Standard</div>
+
+          <div class="cmp-lab"><h2>MCP router</h2></div>
+          <div class="cmp-now"><p>A tool is requested, decided, and invoked only after allow. A remote HTTP tool uses that same path.</p></div>
+          <div class="cmp-std">
+            <p>Any MCP endpoint registers once and the loop does not change.</p>
+            <p class="eg">Calendar and mail can move to another service and the decision event stays.</p>
           </div>
-          <div class="score-arrow" aria-hidden="true"></div>
-          <div class="score-node">
-            <strong>Lifecycle events</strong>
-            <span>requested · decided · invoked · recovery</span>
-          </div>
-          <div class="score-arrow" aria-hidden="true"></div>
-          <div class="score-node">
-            <strong>Same checker</strong>
-            <span>as any other harness</span>
-          </div>
+
+          <div class="cmp-lab"><h2>Virtual memory</h2></div>
+          <div class="cmp-now"><p>An L1 scratchpad compacts when the budget overflows, and the trajectory is not shortened.</p></div>
+          <div class="cmp-std"><p>Episodic cache and cold storage are further tiers. Dropped context is summarized, not deleted from the log.</p></div>
+
+          <div class="cmp-lab"><h2>Telemetry</h2></div>
+          <div class="cmp-now"><p>Model and tool outcomes carry gen_ai and osahi attributes on the event.</p></div>
+          <div class="cmp-std"><p>Those attributes export through OpenTelemetry without a second schema.</p></div>
+
+          <div class="cmp-lab"><h2>Orchestrator</h2></div>
+          <div class="cmp-now"><p>An append-only log, checkpoints, retry / rollback / escalate, and human pause and resume. Replay uses recorded model and tool returns.</p></div>
+          <div class="cmp-std"><p>Any runtime can fold that log and recover the same way. The failed attempt stays.</p></div>
         </div>
-        <ul class="score-labels">
-          <li>The sandbox, the policies, and the shared session stay with the harness.</li>
-          <li>Credentials stay off the record. On Databricks, sandbox model calls go through Unity Gateway. That governance stays Databricks.</li>
-          <li>Agent Bricks hosts the production agent, memory, and MLflow evaluation. The record does not replace them.</li>
-        </ul>
+      </div>
+    </section>
+
+    <section class="slide vision" aria-roledescription="slide" aria-hidden="true">
+      <div class="slide-body">
+        <p class="brand">OSAHI</p>
+        <h1>Neutral interoperability and reliability<br>across models, tools, and runtimes</h1>
+        <div class="tri">
+          <article>
+            <h2>Models</h2>
+            <p>Swap the model. Tool execution and memory stay.</p>
+          </article>
+          <article>
+            <h2>Tools</h2>
+            <p>Move calendar or mail to another service. The decision event stays.</p>
+          </article>
+          <article>
+            <h2>Runtimes</h2>
+            <p>Another loop emits the same record. Recovery and pause still read.</p>
+          </article>
+        </div>
+        <p class="reli">Reliability is checkpoint, pause, resume, and replay that keeps the failed attempt.</p>
       </div>
     </section>
 
     <section class="slide" aria-roledescription="slide" aria-hidden="true">
       <div class="slide-body">
         <p class="brand">OSAHI</p>
-        <h1>Where this grows</h1>
-        <div class="grow">
-          <div class="gpanel">
-            <h2>Same events</h2>
-            <div class="mini">
-              <div class="srcs">
-                <span>Live model</span>
-                <span>Remote tool</span>
-              </div>
-              <svg class="merge-svg" viewBox="0 0 280 36" aria-hidden="true">
-                <path d="M50 2 L140 32" fill="none" stroke="#1a1a1a" stroke-width="1.5"></path>
-                <path d="M230 2 L140 32" fill="none" stroke="#1a1a1a" stroke-width="1.5"></path>
-              </svg>
-              <div class="events">
-                <span>requested</span>
-                <span>decided</span>
-                <span>invoked</span>
-                <span>state</span>
-              </div>
-            </div>
-            <p class="foot">A live model and a remote tool append the same events.</p>
-          </div>
-          <div class="gpanel">
-            <h2>Off the record</h2>
-            <div class="mini off">
-              <span class="box">Credentials</span>
-              <span class="broken" aria-hidden="true"></span>
-              <span class="box">Record</span>
-            </div>
-            <p class="foot">Credentials stay off the record.</p>
-          </div>
-          <div class="gpanel">
-            <h2>Optional client</h2>
-            <div class="mini">
-              <div class="client-col">
-                <div class="box">Console</div>
-                <div class="reads">reads<i></i></div>
-                <div class="box">Contract</div>
-                <p class="optional">optional</p>
-              </div>
-            </div>
-            <p class="foot">A console is a client of the contract.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="slide" aria-roledescription="slide" aria-hidden="true">
-      <div class="slide-body">
-        <p class="brand">OSAHI</p>
-        <h1>Work on the lifecycle</h1>
-        <ol class="work">
-          <li><span class="n">01</span>Implement the record in another runtime</li>
-          <li><span class="n">02</span>Score trajectories</li>
-          <li><span class="n">03</span>Bring a workload</li>
-          <li><span class="n">04</span>Name the next semantic gap</li>
+        <h1>Benefits of the standard</h1>
+        <ol class="benefits">
+          <li><strong>Orchestrator</strong><span>Debugs the path, not only the final sentence.</span></li>
+          <li><strong>Platform</strong><span>Runs many workloads on one record.</span></li>
+          <li><strong>Security</strong><span>Scores allow and deny without a private log.</span></li>
+          <li><strong>Evaluation</strong><span>Separates the model from the harness on the same workload.</span></li>
         </ol>
-        <p class="close-name">Open Standards Agent Harness Initiative</p>
       </div>
     </section>
 

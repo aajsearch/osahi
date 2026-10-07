@@ -64,11 +64,17 @@ Example: the assistant says, "I sent Maya the agenda." The sentence looks finish
 
 ## 8. Who builds on it
 
-Start with the lead role, the assistant orchestrator: connect a model, hydrate from tools, allow or deny, then answer or reach the goal.
+Start with the assistant orchestrator. Connect a model, hydrate from tools, allow or deny, then answer or reach the goal. The line under it: it books Thursday at three. Calendar is allowed. Mail waits for a person. The same events exist no matter which loop ran.
 
-Platform teams run one lifecycle across workloads. Security and audit score a trajectory. Evaluation compares model, harness, and workload. Framework authors emit the same record from their own runtime.
+Then the four roles.
 
-Example: an orchestrator books a meeting. It hydrates calendar and mail. It allows the calendar write. It denies mail until a person confirms the invite text. Then it answers that Thursday at three is booked. Security scores that trajectory. Evaluation repeats the workload on another harness. A framework author emits the same events, and the score still applies.
+Platform teams run one lifecycle across workloads. One booking workload and one send workload share one record.
+
+Security and audit score a trajectory. They score the deny, then the allow, without reading a private log.
+
+Evaluation compares model, harness, and workload. Same workload, two harnesses, compare the path.
+
+Framework authors emit the same record from their own runtime. They emit those events, and the score still applies.
 
 ## 9. What can be shared
 
@@ -78,36 +84,48 @@ Three claims under the figure: a portable execution record, conformance on the p
 
 Example: an assistant books the meeting with one model and one calendar host. You swap the model. You swap the tool host. The record still shows requested, decided, allow, invoked, and the slot written into state. Conformance checks that path.
 
-## 10. A harness and a record
+## 10. Four parts of the lifecycle
 
-Two columns. Omnigent is on the left. OSAHI is on the right.
+Point across the four cards.
 
-Point to Omnigent. It is a meta-harness. It wraps an existing agent, Claude Code, Codex, Pi, or one you write, in a session. Policies, an OS sandbox, and a live shared session sit there. It was built in the open by the Databricks AI team and contributors. The line under the column: it runs the session.
+Open MCP router: discovery, routing, and authorization for tool endpoints. The reasoning loop does not know where the tool lives.
 
-Point to OSAHI. The execution record lists a run, a trajectory, a capability decision, state, a checkpoint, recovery, and telemetry. The line under the column: it records the run.
+Virtual memory: scratchpad, episodic cache, and cold storage. Prune the context. Keep the log.
 
-Example: an engineer uses Omnigent to run Claude Code on a repo with a spend cap and a sandbox. Omnigent runs that session. The record keeps the run.
+GenAI telemetry: OpenTelemetry semantic conventions on every step. Tokens, latency, the tool sequence, and errors.
 
-## 11. The same session can be scored
+Event-sourced orchestrator: an immutable history. Pause and resume. Replay a failure without erasing it.
 
-Point along the flow. An Omnigent session, then the lifecycle events requested, decided, invoked, and recovery, then the same checker as any other harness.
+Example: booking Thursday at three. The calendar call is allowed and mail waits. The scratchpad keeps the slot. The log keeps the timeout. Replay retries from the checkpoint, and the failed attempt stays.
 
-Three lines under the flow. The sandbox, the policies, and the shared session stay with the harness. Credentials stay off the record. On Databricks, sandbox model calls go through Unity Gateway, and that governance stays Databricks. Agent Bricks hosts the production agent, memory, and MLflow evaluation. The record does not replace them.
+## 11. What is running, and what we standardize
 
-Example: that session's tool call was denied, then allowed after the path was hydrated. If those events are on the record, the same score applies to a run from another harness on the same workload.
+Two columns. Now is what this reference runs today. Standard is what another runtime can share. Point down the four rows.
 
-## 12. Where this grows
+MCP router. Now, a tool is requested, decided, and invoked only after allow. A remote HTTP tool uses that same path. Standard, any MCP endpoint registers once and the loop does not change. Calendar and mail can move to another service and the decision event stays.
 
-Three columns.
+Virtual memory. Now, an L1 scratchpad compacts when the budget overflows, and the trajectory is not shortened. Standard, episodic cache and cold storage are further tiers. Dropped context is summarized, not deleted from the log.
 
-Same events: a live model and a remote tool append requested, decided, invoked, and state. Off the record: credentials stay off the record. Optional client: a console reads the contract. It is optional.
+Telemetry. Now, model and tool outcomes carry gen_ai and osahi attributes on the event. Standard, those attributes export through OpenTelemetry without a second schema.
 
-Example: an assistant books a room through a remote calendar. The live model and the remote tool append those same events. The calendar token stays on the credentials side of the break. A console can read the contract and show the decision. The run does not need the console.
+Orchestrator. Now, an append-only log, checkpoints, retry, rollback, escalate, and human pause and resume. Replay uses recorded model and tool returns. Standard, any runtime can fold that log and recover the same way. The failed attempt stays.
 
-## 13. Work on the lifecycle
+Example: the Thursday booking. Send is a second workload on the same record. Calendar is allowed. The timeout is retried. The failed attempt stays on the log.
 
-Four lines, then stop.
+## 12. Neutral interoperability and reliability across models, tools, and runtimes
 
-Implement the record in another runtime. Score trajectories, including the deny, the timeout, and the retry, together with the final sentence. Bring a workload you have actually seen fail: a booking flow or a send flow, with tools, a human pause, and a real failure. Name the next semantic gap when your run does something the record cannot say yet.
+Point at the three columns, then the line under them.
 
-Close: pick one before you leave. Implement the record where you already run agents, or bring one workload and score its trajectories. Then name the next gap you hit.
+Models: swap the model. Tool execution and memory stay. Tools: move calendar or mail to another service. The decision event stays. Runtimes: another loop emits the same record. Recovery and pause still read.
+
+The line under them is reliability: checkpoint, pause, resume, and replay that keeps the failed attempt.
+
+Example: booking Thursday at three. Swap the model. The calendar decision and the timeout retry remain on the record.
+
+## 13. Benefits of the standard
+
+Four lines. Each one is a person from the earlier slide.
+
+An orchestrator debugs the path, not only the final sentence. A platform runs many workloads on one record. Security scores allow and deny without a private log. Evaluation separates the model from the harness on the same workload.
+
+Example: the same Thursday booking. After the model swap, the orchestrator can show the calendar decision and the timeout retry, not only that the meeting is booked. Security scores that path. Evaluation runs the same workload on a second harness.
