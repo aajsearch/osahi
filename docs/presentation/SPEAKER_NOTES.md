@@ -78,7 +78,25 @@ Three claims under the figure: a portable execution record, conformance on the p
 
 Example: an assistant books the meeting with one model and one calendar host. You swap the model. You swap the tool host. The record still shows requested, decided, allow, invoked, and the slot written into state. Conformance checks that path.
 
-## 10. Where this grows
+## 10. A harness and a record
+
+Two columns. Omnigent is on the left. OSAHI is on the right.
+
+Point to Omnigent. It is a meta-harness. It wraps an existing agent, Claude Code, Codex, Pi, or one you write, in a session. Policies, an OS sandbox, and a live shared session sit there. It was built in the open by the Databricks AI team and contributors. The line under the column: it runs the session.
+
+Point to OSAHI. The execution record lists a run, a trajectory, a capability decision, state, a checkpoint, recovery, and telemetry. The line under the column: it records the run.
+
+Example: an engineer uses Omnigent to run Claude Code on a repo with a spend cap and a sandbox. Omnigent runs that session. The record keeps the run.
+
+## 11. The same session can be scored
+
+Point along the flow. An Omnigent session, then the lifecycle events requested, decided, invoked, and recovery, then the same checker as any other harness.
+
+Three lines under the flow. The sandbox, the policies, and the shared session stay with the harness. Credentials stay off the record. On Databricks, sandbox model calls go through Unity Gateway, and that governance stays Databricks. Agent Bricks hosts the production agent, memory, and MLflow evaluation. The record does not replace them.
+
+Example: that session's tool call was denied, then allowed after the path was hydrated. If those events are on the record, the same score applies to a run from another harness on the same workload.
+
+## 12. Where this grows
 
 Three columns.
 
@@ -86,7 +104,7 @@ Same events: a live model and a remote tool append requested, decided, invoked, 
 
 Example: an assistant books a room through a remote calendar. The live model and the remote tool append those same events. The calendar token stays on the credentials side of the break. A console can read the contract and show the decision. The run does not need the console.
 
-## 11. Work on the lifecycle
+## 13. Work on the lifecycle
 
 Four lines, then stop.
 
